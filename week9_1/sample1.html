@@ -1,0 +1,241 @@
+        <div class="aside-content">
+          <p class="aside-kicker">Creative Coding Lab · Spring session</p>
+          <h2>Bring your next idea to life.</h2>
+          <p class="aside-copy">Join a hands-on community exploring the playful side of the web. Pick a track and save your seat.</p>
+        </div>
+        <div class="aside-bottom"><span class="aside-dots" aria-hidden="true"><span></span><span></span><span></span></span> Learn by making · Share what you find</div>
+      </aside>
+      <div class="form-main">
+        <p class="eyebrow">Save your spot</p>
+        <h1>Lab registration</h1>
+        <p class="form-intro">A few quick details. We’ll let you know if anything needs a second look.</p>
+        <form id="regForm" novalidate>
+          <fieldset class="form-section">
+            <legend>Your details</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="studentId">Campus ID <span class="field-hint">(9 digits)</span></label>
+                <input type="text" id="studentId" name="studentId" inputmode="numeric" autocomplete="off" placeholder="e.g. 202612345" aria-describedby="idError" aria-invalid="false">
+                <p id="idError" class="error-msg" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="fullName">Your name</label>
+                <input type="text" id="fullName" name="fullName" autocomplete="name" placeholder="First and last name" aria-describedby="nameError" aria-invalid="false">
+                <p id="nameError" class="error-msg" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="track">Choose a lab track</label>
+              <select id="track" name="track" aria-describedby="trackError" aria-invalid="false">
+                <option value="">Select a track</option>
+                <option value="Creative Web Design">Creative Web Design</option>
+                <option value="Generative Art">Generative Art</option>
+                <option value="Interactive Experiences">Interactive Experiences</option>
+                <option value="Digital Prototyping">Digital Prototyping</option>
+              </select>
+              <p id="trackError" class="error-msg" aria-live="polite"></p>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>Set up your account</legend>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.edu" aria-describedby="emailError" aria-invalid="false">
+              <p id="emailError" class="error-msg" aria-live="polite"></p>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="password">Create a password</label>
+                <input type="password" id="password" name="password" autocomplete="new-password" placeholder="At least 8 characters" aria-describedby="passwordError" aria-invalid="false">
+                <p id="passwordError" class="error-msg" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="confirmPassword">Confirm password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" placeholder="Type it once more" aria-describedby="confirmError" aria-invalid="false">
+                <p id="confirmError" class="error-msg" aria-live="polite"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="checkbox-wrap">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" aria-describedby="termsError" aria-invalid="false">
+            <label for="agreeTerms">I agree to the Creative Coding Lab participation guidelines.</label>
+          </div>
+          <p id="termsError" class="error-msg terms-error" aria-live="polite"></p>
+
+          <button type="submit" class="submit-button">Reserve my spot <span aria-hidden="true">→</span></button>
+          <p class="form-footnote">Demo only. Details stay in this browser; your password is never shown.</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="successCard" class="success-card" aria-labelledby="successHeading" tabindex="-1" hidden>
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <p class="eyebrow">You’re on the list</p>
+      <h1 id="successHeading">Your next idea starts here.</h1>
+      <p>Your demo registration is complete. Here’s a quick look at your details.</p>
+      <dl id="summaryDetails" class="summary-box"></dl>
+      <button type="button" class="reset-button" id="resetButton">Register another maker</button>
+    </section>
+  </main>
+  <script>
+    const form = document.getElementById('regForm');
+    const idInput = document.getElementById('studentId');
+    const nameInput = document.getElementById('fullName');
+    const trackInput = document.getElementById('track');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const termsInput = document.getElementById('agreeTerms');
+    const formContainer = document.getElementById('formContainer');
+    const successCard = document.getElementById('successCard');
+    const summaryDetails = document.getElementById('summaryDetails');
+    const touchedFields = new Set();
+
+    function markValid(input, errorId) {
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
+      input.setAttribute('aria-invalid', 'false');
+      document.getElementById(errorId).textContent = '';
+      return true;
+    }
+
+    function markInvalid(input, errorId, message) {
+      input.classList.remove('is-valid');
+      input.classList.add('is-invalid');
+      input.setAttribute('aria-invalid', 'true');
+      document.getElementById(errorId).textContent = message;
+      return false;
+    }
+
+    function checkId() {
+      const value = idInput.value.trim();
+      if (!value) return markInvalid(idInput, 'idError', 'Enter your campus ID.');
+      if (!/^\d{9}$/.test(value)) return markInvalid(idInput, 'idError', 'Your campus ID must be exactly 9 digits.');
+      return markValid(idInput, 'idError');
+    }
+
+    function checkName() {
+      const value = nameInput.value.trim();
+      if (!value) return markInvalid(nameInput, 'nameError', 'Tell us your name.');
+      if (value.length < 2) return markInvalid(nameInput, 'nameError', 'Your name must be at least 2 characters.');
+      return markValid(nameInput, 'nameError');
+    }
+
+    function checkTrack() {
+      if (!trackInput.value) return markInvalid(trackInput, 'trackError', 'Choose the lab track you’re interested in.');
+      return markValid(trackInput, 'trackError');
+    }
+
+    function checkEmail() {
+      const value = emailInput.value.trim();
+      if (!value) return markInvalid(emailInput, 'emailError', 'Enter your email address.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        return markInvalid(emailInput, 'emailError', 'Enter a valid email address, like you@example.edu.');
+      }
+      return markValid(emailInput, 'emailError');
+    }
+
+    function checkPassword() {
+      if (!passwordInput.value) return markInvalid(passwordInput, 'passwordError', 'Create a password to continue.');
+      if (passwordInput.value.length < 8) {
+        return markInvalid(passwordInput, 'passwordError', 'Use at least 8 characters for your password.');
+      }
+      markValid(passwordInput, 'passwordError');
+      if (touchedFields.has(confirmInput)) checkConfirm();
+      return true;
+    }
+
+    function checkConfirm() {
+      if (!confirmInput.value) return markInvalid(confirmInput, 'confirmError', 'Type your password one more time.');
+      if (confirmInput.value !== passwordInput.value) {
+        return markInvalid(confirmInput, 'confirmError', 'These passwords don’t match yet.');
+      }
+      return markValid(confirmInput, 'confirmError');
+    }
+
+    function checkTerms() {
+      const error = document.getElementById('termsError');
+      if (!termsInput.checked) {
+        termsInput.setAttribute('aria-invalid', 'true');
+        error.textContent = 'Please agree to the participation guidelines to register.';
+        return false;
+      }
+      termsInput.setAttribute('aria-invalid', 'false');
+      error.textContent = '';
+      return true;
+    }
+
+    const fieldChecks = new Map([
+      [idInput, checkId],
+      [nameInput, checkName],
+      [trackInput, checkTrack],
+      [emailInput, checkEmail],
+      [passwordInput, checkPassword],
+      [confirmInput, checkConfirm]
+    ]);
+
+    for (const [input, check] of fieldChecks) {
+      input.addEventListener('blur', () => {
+        touchedFields.add(input);
+        check();
+      });
+      input.addEventListener(input === trackInput ? 'change' : 'input', () => {
+        if (touchedFields.has(input)) check();
+      });
+    }
+
+    termsInput.addEventListener('change', checkTerms);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      for (const input of fieldChecks.keys()) touchedFields.add(input);
+
+      const checks = [...fieldChecks.values()].map((check) => check());
+      const termsValid = checkTerms();
+      const valid = checks.every(Boolean) && termsValid;
+      if (!valid) {
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        firstInvalid?.focus();
+        return;
+      }
+
+      const details = [
+        ['Campus ID', idInput.value.trim()],
+        ['Name', nameInput.value.trim()],
+        ['Lab track', trackInput.value],
+        ['Email', emailInput.value.trim()]
+      ];
+      summaryDetails.replaceChildren(...details.map(([label, value]) => {
+        const row = document.createElement('div');
+        row.className = 'summary-row';
+        const term = document.createElement('dt');
+        term.textContent = label;
+        const description = document.createElement('dd');
+        description.textContent = value;
+        row.append(term, description);
+        return row;
+      }));
+
+      formContainer.hidden = true;
+      successCard.hidden = false;
+      successCard.focus();
+    });
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      form.reset();
+      touchedFields.clear();
+      for (const input of [...fieldChecks.keys(), termsInput]) {
+        input.classList.remove('is-valid', 'is-invalid');
+        input.setAttribute('aria-invalid', 'false');
+      }
+      for (const error of form.querySelectorAll('.error-msg')) error.textContent = '';
+      summaryDetails.replaceChildren();
+      successCard.hidden = true;
+      formContainer.hidden = false;
+      idInput.focus();
+    });
+  </script>
+</body>
+</html>
