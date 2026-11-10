@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Sample 06 | Trivia Time</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">Back to Week 6</a>
+    <p class="eyebrow">Sample 06 · Question and answer</p>
+    <h1>Trivia Time</h1>
+    <p class="lede">Ask the public trivia API for a random question, then try your luck with the multiple-choice answers.</p>
+    <section class="panel demo-panel" aria-label="Trivia challenge">
+      <div class="demo-heading">
+        <p class="eyebrow">Open Trivia DB</p>
+        <h2>Ready for a challenge?</h2>
+      </div>
+      <button id="next-question" type="button">Get a question</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <article id="question-card" class="user-card" aria-live="polite">
+        <p class="user-placeholder">Press the button to load a trivia question.</p>
+      </article>
+    </section>
+  </main>
+  <script>
+    const status = document.querySelector('#status');
+    const questionCard = document.querySelector('#question-card');
+    const nextButton = document.querySelector('#next-question');
+
+    function decodeHtml(unsafe) {
+      const container = document.createElement('textarea');
+      container.innerHTML = unsafe;
+      return container.value;
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let index = copy.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
+      }
+      return copy;
+    }
+
+    function renderQuestion(questionData) {
+      const question = decodeHtml(questionData.question);
+      const correctAnswer = decodeHtml(questionData.correct_answer);
+      const options = shuffle([
+        ...questionData.incorrect_answers.map((answer) => decodeHtml(answer)),
+        correctAnswer
+      ]);
+
+      questionCard.replaceChildren();
+
+      const prompt = document.createElement('h2');
+      prompt.textContent = question;
+
+      const optionList = document.createElement('div');
+      optionList.className = 'weather-details';
+
+      options.forEach((option) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = option;
+        button.style.width = '100%';
+        button.addEventListener('click', () => {
+          const isCorrect = option === correctAnswer;
+          status.textContent = isCorrect ? 'Correct! Nice job.' : `Not quite. The correct answer was “${correctAnswer}”.`;
+          status.dataset.state = isCorrect ? 'success' : 'error';
+          [...optionList.querySelectorAll('button')].forEach((choice) => {
+            choice.disabled = true;
+            choice.style.opacity = '0.9';
+            if (choice.textContent === correctAnswer) {
+              choice.style.borderColor = 'var(--accent)';
+            }
+          });
+        });
+        optionList.appendChild(button);
+      });
+
+      const category = document.createElement('p');
+      category.textContent = `Category: ${decodeHtml(questionData.category)}`;
+      category.className = 'user-country';
+
+      questionCard.append(prompt, category, optionList);
+      status.textContent = 'Question loaded.';
+      status.dataset.state = 'success';
+    }
+
+    nextButton.addEventListener('click', async () => {
+      status.textContent = 'Loading a question…';
+      status.dataset.state = 'loading';
+      nextButton.disabled = true;
+      questionCard.replaceChildren();
+
+      try {
+        const response = await fetch('https://opentdb.com/api.php?amount=1&category=9&type=multiple');
+        if (!response.ok) throw new Error(`The server responded with ${response.status}.`);
+
+        const data = await response.json();
+        const questionData = data.results?.[0];
+        if (!questionData) throw new Error('The response did not include a question.');
+
+        renderQuestion(questionData);
+      } catch (error) {
+        status.textContent = `Unable to load question. ${error.message}`;
+        status.dataset.state = 'error';
+      } finally {
+        nextButton.disabled = false;
+        console.log('Trivia request finished.');
+      }
+    });
+  </script>
+</body>
+</html>

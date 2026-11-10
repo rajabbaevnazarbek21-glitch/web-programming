@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Sample 02 | Random User Generator</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">Back to Week 6</a>
+    <p class="eyebrow">Sample 02 · Fetch a profile</p>
+    <h1>Random User Generator</h1>
+    <p class="lede">Request a sample profile and display the details returned by the API.</p>
+    <section class="panel demo-panel" aria-label="Random user demo">
+      <div class="demo-heading">
+        <p class="eyebrow">RandomUser.me</p>
+        <h2>Meet someone new</h2>
+      </div>
+      <button id="load-user" type="button">Get a random user</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <article class="user-card" id="user-card">
+        <p class="user-placeholder">Click the button to get a user profile.</p>
+      </article>
+    </section>
+  </main>
+  <script>
+    const status = document.querySelector('#status');
+    const card = document.querySelector('#user-card');
+    const loadButton = document.querySelector('#load-user');
+
+    loadButton.addEventListener('click', async () => {
+      status.textContent = 'Finding a profile…';
+      status.dataset.state = 'loading';
+      loadButton.disabled = true;
+
+      try {
+        const response = await fetch('https://randomuser.me/api/');
+        if (!response.ok) throw new Error(`The server responded with ${response.status}.`);
+        const data = await response.json();
+        const user = data.results?.[0];
+        if (!user) throw new Error('The response did not contain a user profile.');
+
+        const image = document.createElement('img');
+        image.className = 'user-avatar';
+        image.src = user.picture.large;
+        image.alt = `Portrait of ${user.name.first} ${user.name.last}`;
+
+        const name = document.createElement('h2');
+        name.textContent = `${user.name.first} ${user.name.last}`;
+
+        const email = document.createElement('p');
+        email.textContent = user.email;
+
+        const country = document.createElement('p');
+        country.className = 'user-country';
+        country.textContent = user.location.country;
+
+        card.replaceChildren(image, name, email, country);
+        status.textContent = 'Profile loaded successfully.';
+        status.dataset.state = 'success';
+      } catch (error) {
+        status.textContent = `Unable to load a user. ${error.message}`;
+        status.dataset.state = 'error';
+      } finally {
+        loadButton.disabled = false;
+        console.log('Request completed.');
+      }
+    });
+  </script>
+</body>
+</html>

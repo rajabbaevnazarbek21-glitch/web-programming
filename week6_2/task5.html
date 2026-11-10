@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Sample 05 | Dog Spotlight</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">Back to Week 6</a>
+    <p class="eyebrow">Sample 05 · Fetch image collections</p>
+    <h1>Dog Spotlight</h1>
+    <p class="lede">Request a set of dog photos from a public API and display a fresh lineup of furry friends.</p>
+    <section class="panel demo-panel" aria-label="Dog image gallery">
+      <div class="demo-heading">
+        <p class="eyebrow">Dog CEO</p>
+        <h2>Fresh dog picks</h2>
+      </div>
+      <button id="load-dogs" type="button">Load dogs</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div id="dogs" class="hero-grid"></div>
+    </section>
+  </main>
+  <script>
+    const dogsContainer = document.querySelector('#dogs');
+    const status = document.querySelector('#status');
+    const loadButton = document.querySelector('#load-dogs');
+
+    loadButton.addEventListener('click', async () => {
+      status.textContent = 'Fetching adorable dogs…';
+      status.dataset.state = 'loading';
+      dogsContainer.replaceChildren();
+      loadButton.disabled = true;
+
+      try {
+        const response = await fetch('https://dog.ceo/api/breeds/image/random/6');
+        if (!response.ok) throw new Error(`The server responded with ${response.status}.`);
+
+        const data = await response.json();
+        const dogs = Array.isArray(data.message) ? data.message : [];
+        if (!dogs.length) throw new Error('The response did not include any dog images.');
+
+        const cards = dogs.map((dogUrl) => {
+          const card = document.createElement('article');
+          card.className = 'hero-card';
+
+          const image = document.createElement('img');
+          image.src = dogUrl;
+          image.alt = 'A happy dog';
+          image.loading = 'lazy';
+
+          const info = document.createElement('div');
+          info.className = 'hero-info';
+
+          const title = document.createElement('h2');
+          title.textContent = 'Dog photo';
+
+          const subtitle = document.createElement('p');
+          subtitle.textContent = 'Fresh from the api.';
+
+          info.append(title, subtitle);
+          card.append(image, info);
+          return card;
+        });
+
+        dogsContainer.replaceChildren(...cards);
+        status.textContent = `Loaded ${dogs.length} dog photos.`;
+        status.dataset.state = 'success';
+      } catch (error) {
+        status.textContent = `Could not load dogs. ${error.message}`;
+        status.dataset.state = 'error';
+      } finally {
+        loadButton.disabled = false;
+        console.log('Dog request finished.');
+      }
+    });
+  </script>
+</body>
+</html>
