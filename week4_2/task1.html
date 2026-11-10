@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Exercise 1 | Click Counter</title><link rel="stylesheet" href="../style.css"></head>
+<body><main><a class="back" href="../index.html">Back to Week 4</a><p class="eyebrow">Exercise 1 · Events</p><h1>Click Counter</h1><p class="lede">Count button clicks. At five, celebrate and change the button state.</p>
+<section class="panel"><button id="count-button" type="button">Click me</button><p class="output" aria-live="polite">Click count: <strong id="count">0</strong></p><p id="message" class="output" aria-live="polite"></p></section>
+<script>
+let clicks = 0;
+const button = document.querySelector('#count-button');
+button.addEventListener('click', () => {
+  clicks += 1;
+  document.querySelector('#count').textContent = clicks;
+  if (clicks >= 5) {
+    button.classList.add('done');
+    button.style.backgroundColor = '#238448';
+    button.style.borderColor = '#238448';
+    document.querySelector('#message').textContent = 'Congratulations! You reached five clicks.';
+  }
+});
+</script></main></body></html>

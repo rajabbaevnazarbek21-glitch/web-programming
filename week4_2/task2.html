@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Exercise 2 | Dark Mode Card</title><link rel="stylesheet" href="../style.css"></head>
+<body><main><a class="back" href="../index.html">Back to Week 4</a><p class="eyebrow">Exercise 2 · classList</p><h1>Dark Mode Toggle</h1><p class="lede">Toggle a class on the profile card and keep the button label in sync.</p>
+<section id="profile" class="panel"><h2>Alex Morgan</h2><p>Web programming student</p><button id="toggle" type="button" aria-pressed="false">Turn on dark mode</button></section>
+<script>
+const card = document.querySelector('#profile');
+const toggle = document.querySelector('#toggle');
+toggle.addEventListener('click', () => {
+  const isDark = card.classList.toggle('dark-card');
+  toggle.textContent = isDark ? 'Turn off dark mode' : 'Turn on dark mode';
+  toggle.setAttribute('aria-pressed', String(isDark));
+});
+</script></main></body></html>

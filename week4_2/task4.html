@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Exercise 4 | Live Search</title><link rel="stylesheet" href="../style.css"></head>
+<body><main><a class="back" href="../index.html">Back to Week 4</a><p class="eyebrow">Exercise 4 · Filtering</p><h1>Live Student Search</h1><p class="lede">Type a name or major to filter the list as you go.</p>
+<section class="panel"><label for="search">Search students</label><div class="controls"><input id="search" type="search" placeholder="Try “design” or “lee”"></div><ul class="list" id="students"><li class="student">Mina Lee · Computer Science</li><li class="student">Daniel Kim · Digital Design</li><li class="student">Sora Park · Web Programming</li><li class="student">Jamie Choi · Computer Science</li><li class="student">Alex Morgan · Digital Design</li></ul><p id="result" class="output" aria-live="polite"></p></section>
+<script>
+const search = document.querySelector('#search');
+const students = document.querySelectorAll('.student');
+const result = document.querySelector('#result');
+search.addEventListener('input', (event) => {
+  const term = event.target.value.trim().toLowerCase();
+  let visible = 0;
+  students.forEach((student) => {
+    const matches = student.textContent.toLowerCase().includes(term);
+    student.hidden = !matches;
+    if (matches) visible += 1;
+  });
+  result.textContent = `${visible} student${visible === 1 ? '' : 's'} shown`;
+});
+</script></main></body></html>

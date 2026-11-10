@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Exercise 3 | To-Do List</title><link rel="stylesheet" href="../style.css"></head>
+<body><main><a class="back" href="../index.html">Back to Week 4</a><p class="eyebrow">Exercise 3 · Dynamic DOM</p><h1>Interactive To-Do List</h1><p class="lede">Add a task with Enter or the button, then remove tasks using the list's delegated click handler.</p>
+<section class="panel"><form id="task-form"><label for="task-input">New task</label><div class="controls"><input id="task-input" type="text" placeholder="e.g. Review DOM notes" required><button type="submit">Add task</button></div></form><ul id="tasks" class="list" aria-live="polite"></ul><p id="empty" class="muted">No tasks yet.</p></section>
+<script>
+const form = document.querySelector('#task-form');
+const input = document.querySelector('#task-input');
+const tasks = document.querySelector('#tasks');
+const empty = document.querySelector('#empty');
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  const item = document.createElement('li');
+  const label = document.createElement('span');
+  label.textContent = text;
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.className = 'delete-task';
+  remove.textContent = 'Remove';
+  remove.setAttribute('aria-label', `Remove ${text}`);
+  item.append(label, remove);
+  tasks.append(item);
+  input.value = '';
+  input.focus();
+  empty.hidden = true;
+});
+tasks.addEventListener('click', (event) => {
+  if (event.target.matches('.delete-task')) event.target.closest('li').remove();
+  empty.hidden = tasks.children.length > 0;
+});
+</script></main></body></html>
