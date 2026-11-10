@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exercise 5 - Fixed Nav</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f8fafc; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; z-index: 100;
+    }
+    nav a { color: white; text-decoration: none; margin-left: 18px; }
+    nav a:hover { color: #2dd4bf; }
+    .content { padding-top: 80px; }
+    .hero { height: 120vh; padding: 32px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div>Nazarbek</div>
+    <div><a href="#">Home</a><a href="#">Skills</a><a href="#">Contact</a></div>
+  </nav>
+  <div class="content">
+    <div class="hero">Scroll down to see the fixed navbar stay at the top while the page continues.</div>
+  </div>
+</body>
+</html>

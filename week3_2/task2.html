@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exercise 2 - Hover Card</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0fdfa; display: grid; place-items: center; min-height: 100vh; margin: 0; }
+    .card {
+      width: 240px; padding: 24px; background: white; border: 2px solid #14b8a6; border-radius: 12px; color: #0f766e;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(20,184,166,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">Nazarbek Hover Card</div>
+</body>
+</html>
