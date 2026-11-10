@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Book Finder | Open Library</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="finder-header">
+    <a class="back" href="../index.html">Back to Week 7</a>
+    <p class="eyebrow">Open Library Search</p>
+    <h1>Find your next<br>great read.</h1>
+    <p>Search millions of books and discover something new to add to your shelf.</p>
+  </header>
+
+  <main class="finder-page">
+    <section class="finder-shell" aria-label="Book search">
+      <div class="finder-toolbar">
+        <form id="search-form" class="search-form" role="search">
+          <input id="search-input" type="search" placeholder="Search by book title…" aria-label="Book title" required>
+          <button id="search-button" type="submit">Search books <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="results-top">
+          <div>
+            <h2 id="results-heading">Popular discoveries</h2>
+            <p id="results-subtitle" class="results-subtitle">Search by title to find your next book.</p>
+          </div>
+          <span id="result-count" class="result-count"></span>
+        </div>
+        <div id="status-message" class="status-message" role="status" aria-live="polite">
+          <div class="status-icon" aria-hidden="true">⌕</div>
+          <h3>What would you like to read?</h3>
+          <p>Try “Marvel”, “Spider-Man”, or “Avengers”.</p>
+        </div>
+        <section id="results" class="book-grid" aria-label="Book search results"></section>
+      </div>
+      <footer class="finder-footer">Book Finder · Powered by <a href="https://openlibrary.org/" target="_blank" rel="noreferrer">Open Library</a></footer>
+    </section>
+  </main>
+  <script>
+    const searchForm = document.querySelector('#search-form');
+    const searchInput = document.querySelector('#search-input');
+    const searchButton = document.querySelector('#search-button');
+    const results = document.querySelector('#results');
+    const statusMessage = document.querySelector('#status-message');
+    const resultsHeading = document.querySelector('#results-heading');
+    const resultsSubtitle = document.querySelector('#results-subtitle');
+    const resultCount = document.querySelector('#result-count');
+
+    searchForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) searchBooks(query);
+    });
+
+    async function searchBooks(query) {
+      resultsHeading.textContent = 'Search results';
+      resultsSubtitle.textContent = `Books matching “${query}”`;
+      resultCount.textContent = '';
+      searchButton.disabled = true;
+      searchButton.textContent = 'Searching…';
+      showLoading();
+
+      try {
+        const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=12`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`The server responded with ${response.status}.`);
+
+        const data = await response.json();
+        const books = Array.isArray(data.docs) ? data.docs : [];
+        if (!books.length) {
+          showMessage('No books found', 'Try another title or check your spelling.');
+          return;
+        }
+
+        const cards = books.map(createBookCard);
+        statusMessage.hidden = true;
+        results.replaceChildren(...cards);
+        resultCount.textContent = `${books.length} books`;
+      } catch (error) {
+        showMessage('Something went wrong', `Could not load books. ${error.message}`, true);
+        console.error(error);
+      } finally {
+        searchButton.disabled = false;
+        searchButton.innerHTML = 'Search books <span aria-hidden="true">→</span>';
+      }
+    }
+
+    function createBookCard(book) {
+      const card = document.createElement('article');
+      card.className = 'book-card';
+
+      const cover = document.createElement('div');
+      cover.className = 'cover';
+      if (book.cover_i) {
+        const image = document.createElement('img');
+        image.src = `https://covers.openlibrary.org/b/id/${encodeURIComponent(book.cover_i)}-M.jpg`;
+        image.alt = `Cover of ${book.title || 'book'}`;
+        image.loading = 'lazy';
+        image.addEventListener('error', () => {
+          image.remove();
+          addPlaceholder(cover);
+        }, { once: true });
+        cover.append(image);
+      } else {
+        addPlaceholder(cover);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'book-info';
+      const title = document.createElement('h3');
+      title.textContent = book.title || 'Untitled';
+
+      const author = document.createElement('p');
+      author.className = 'book-author';
+      author.textContent = book.author_name?.length
+        ? book.author_name.slice(0, 2).join(', ')
+        : 'Unknown author';
+      info.append(title, author);
+
+      if (book.first_publish_year) {
+        const year = document.createElement('span');
+        year.className = 'book-year';
+        year.textContent = `First published ${book.first_publish_year}`;
+        info.append(year);
+      }
+
+      card.append(cover, info);
+      return card;
+    }
+
+    function addPlaceholder(container) {
+      const placeholder = document.createElement('span');
+      placeholder.className = 'cover-placeholder';
+      placeholder.setAttribute('aria-label', 'No cover available');
+      placeholder.textContent = '📚';
+      container.append(placeholder);
+    }
+
+    function showLoading() {
+      statusMessage.hidden = true;
+      const skeletons = Array.from({ length: 8 }, () => {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'skeleton';
+        skeleton.setAttribute('aria-hidden', 'true');
+        return skeleton;
+      });
+      results.replaceChildren(...skeletons);
+    }
+
+    function showMessage(titleText, bodyText, isError = false) {
+      results.replaceChildren();
+      statusMessage.hidden = false;
+      statusMessage.classList.toggle('is-error', isError);
+      const icon = document.createElement('div');
+      icon.className = 'status-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = isError ? '!' : '⌕';
+      const title = document.createElement('h3');
+      title.textContent = titleText;
+      const body = document.createElement('p');
+      body.textContent = bodyText;
+      statusMessage.replaceChildren(icon, title, body);
+    }
+  </script>
+</body>
+</html>
