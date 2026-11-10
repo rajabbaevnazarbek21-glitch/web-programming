@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Sample 01 | JavaScript Counter</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">Back to Week 5</a>
+    <p class="eyebrow">Sample 01 · Variables and events</p>
+    <section class="panel counter-panel" aria-labelledby="counter-heading">
+      <span class="counter-icon" aria-hidden="true">↕</span>
+      <h1 id="counter-heading">JavaScript Counter</h1>
+      <p class="counter-label">Current count</p>
+      <output id="count" class="counter-value" aria-live="polite" aria-atomic="true">0</output>
+      <div class="controls" aria-label="Counter controls">
+        <button class="secondary" type="button" data-change="-1">− Subtract</button>
+        <button type="button" data-change="1">＋ Add</button>
+        <button class="reset" id="reset" type="button">Reset</button>
+      </div>
+      <p class="counter-hint">Use the buttons to change the count. There’s no limit.</p>
+    </section>
+  </main>
+  <script>
+    let count = 0;
+    const countOutput = document.querySelector('#count');
+
+    document.querySelectorAll('[data-change]').forEach((button) => {
+      button.addEventListener('click', () => {
+        count += Number(button.dataset.change);
+        countOutput.textContent = count;
+      });
+    });
+
+    document.querySelector('#reset').addEventListener('click', () => {
+      count = 0;
+      countOutput.textContent = count;
+    });
+  </script>
+</body>
+</html>
