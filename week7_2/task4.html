@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book Search - Web Programming</title>
+<style>
+body{font-family:system-ui,Arial,sans-serif;background:#0f1f1f;color:#fff;margin:0;padding:40px 20px}
+.wrap{max-width:800px;margin:0 auto}
+a{color:#a8e6a3;text-decoration:none;font-weight:700}
+h1{font-family:Georgia,serif;font-size:clamp(48px,8vw,72px);margin:16px 0 8px}
+p.sub{color:#a7b8b8;font-size:18px}
+form{display:flex;gap:12px;margin:28px 0}
+input{flex:1;padding:14px 16px;border:1px solid #2a3a3a;border-radius:10px;background:#162626;color:#fff;font-size:16px}
+input:focus{outline:2px solid #a8e6a3}
+button{background:#a8e6a3;color:#111;border:0;padding:14px 22px;border-radius:10px;font-weight:800;cursor:pointer;font-size:16px}
+h2{font-family:Georgia,serif;font-size:32px;margin-top:36px}
+#status{color:#a7b8b8}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px}
+.card{background:#162626;border-radius:12px;padding:14px}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:8px;background:#233}
+.card h3{font-size:16px;margin:10px 0 4px}
+.card p{color:#a7b8b8;font-size:14px;margin:2px 0}
+@media(max-width:480px){form{flex-direction:column}}
+</style></head>
+<body>
+<div class="wrap">
+<a href="../index.html">← WEEK 7</a>
+<h1>Book Search</h1>
+<p class="sub">Search Open Library by title or author.</p>
+<form id="f">
+<input id="q" type="search" placeholder="Search by title or author" aria-label="Search by title or author" required>
+<button type="submit">Search</button>
+</form>
+<h2>Results</h2>
+<p id="status">Enter a book title or author to get started.</p>
+<div class="grid" id="results" role="status" aria-live="polite"></div>
+</div>
+<script>
+const f=document.getElementById('f'), q=document.getElementById('q'),
+status=document.getElementById('status'), results=document.getElementById('results');
+f.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const query=q.value.trim();
+  if(!query) return;
+  status.textContent='Loading...'; results.innerHTML='';
+  try{
+    const res=await fetch('https://openlibrary.org/search.json?q='+encodeURIComponent(query)+'&limit=12');
+    if(!res.ok) throw new Error('Fetch failed');
+    const data=await res.json();
+    if(!data.docs || data.docs.length===0){ status.textContent='No books found for "'+query+'".'; return; }
+    status.textContent='Found '+data.numFound.toLocaleString()+' books - showing '+data.docs.length;
+    results.innerHTML = data.docs.map(b=>{
+      const cover = b.cover_i ? 'https://covers.openlibrary.org/b/id/'+b.cover_i+'-M.jpg' : 'https://via.placeholder.com/200x280?text=No+Cover';
+      const author = b.author_name ? b.author_name.join(', ') : 'Unknown author';
+      const year = b.first_publish_year || '—';
+      return `<article class="card"><img src="${cover}" alt="Cover of ${b.title}" loading="lazy" width="200" height="280"><h3>${b.title}</h3><p>${author}</p><p>First published: ${year}</p></article>`;
+    }).join('');
+  }catch(err){ status.textContent='Error: Could not load books. Check internet and try again.'; }
+});
+</script>
+</body></html>
