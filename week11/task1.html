@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProductCard - React Props Challenge</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+body{font-family:system-ui,Arial,sans-serif;background:#f1f5f9;margin:0;padding:32px 16px}
+h1{text-align:center} .wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.card.out{opacity:.65} .price{font-size:22px;font-weight:800}
+.stars{color:#f59e0b} .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.in{background:#dcfce7;color:#166534} .out-badge{background:#fee2e2;color:#991b1b}
+button{background:#2563eb;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-top:12px}
+button:disabled{background:#94a3b8;cursor:not-allowed}
+code{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;display:block;white-space:pre-wrap;margin:16px auto;max-width:900px}
+</style></head>
+<body>
+<h1>ProductCard Challenge</h1>
+<code>&lt;ProductCard name="Wireless Earbuds" price={89000} rating={4.5} inStock={true} /&gt;</code>
+<div id="root"></div>
+<script type="text/babel">
+function ProductCard({ name, price, rating, inStock }) {
+  const stars = "★".repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? "☆" : "");
+  return (
+    <div className={"card " + (!inStock ? "out" : "")}>
+      <h2>{name}</h2>
+      <p className="price">{price.toLocaleString('ko-KR')} KRW</p>
+      <p><span className="stars">{stars}</span> {rating} / 5 stars</p>
+      {inStock
+        ? <span className="badge in">In Stock</span>
+        : <span className="badge out-badge">Out of Stock</span>}
+      <br/>
+      <button disabled={!inStock}>{inStock ? "Add to Cart" : "Out of Stock"}</button>
+    </div>
+  );
+}
+function App(){
+  return (
+    <div className="wrap">
+      <ProductCard name="Wireless Earbuds" price={89000} rating={4.5} inStock={true} />
+      <ProductCard name="Smart Watch" price={129000} rating={4.8} inStock={true} />
+      <ProductCard name="Mechanical Keyboard" price={99000} rating={4.2} inStock={false} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

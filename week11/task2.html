@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio Gallery - React</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+body{font-family:system-ui,Arial,sans-serif;background:#f8fafc;margin:0;padding:24px 16px}
+.wrap{max-width:900px;margin:0 auto} h1{text-align:center}
+.filter{background:#ffedd5;padding:14px;border-radius:10px;margin:16px 0}
+.filter button{margin:4px;padding:8px 14px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font-weight:700}
+.filter button.active{background:#2563eb;color:#fff;border-color:#2563eb}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.tech{display:inline-block;background:#e0e7ff;padding:3px 8px;border-radius:999px;font-size:12px;margin:2px}
+a{color:#2563eb;font-weight:700;text-decoration:none;margin-right:12px}
+</style></head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+const projects = [
+  { id:1, title:"Web Programming Portfolio", description:"My coursework site - weeks 4 to 11, HTML, CSS, JS and React.", tech:["React","CSS"], github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming", demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/" },
+  { id:2, title:"Registration Form", description:"Upgraded registration form with JS validation, aria-invalid and setCustomValidity.", tech:["React","Node"], github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming", demo:"#" },
+  { id:3, title:"Product Gallery", description:"ProductCard with props name, price, rating, inStock and out-of-stock label.", tech:["React","CSS"], github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming", demo:"#" },
+  { id:4, title:"Todo API App", description:"Fetch API demo with loading and error states.", tech:["Node","CSS"], github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming", demo:"#" },
+];
+function ProjectCard({ title, description, tech, github, demo }){
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <p>{description}</p>
+      <p>{tech.map(t=><span key={t} className="tech">{t}</span>)}</p>
+      <a href={github} target="_blank">GitHub</a><a href={demo} target="_blank">Demo</a>
+    </div>
+  );
+}
+function FilterBar({ filters, active, onChange }){
+  return (
+    <div className="filter"><b>FilterBar: </b>
+      {filters.map(f=><button key={f} className={active===f?"active":""} onClick={()=>onChange(f)}>{f}</button>)}
+    </div>
+  );
+}
+function ProjectList({ projects }){
+  return <div className="list">{projects.map(p=><ProjectCard key={p.id} {...p} />)}</div>;
+}
+function App(){
+  const [filter, setFilter] = useState("All");
+  const filters = ["All","React","Node","CSS"];
+  const shown = filter==="All" ? projects : projects.filter(p=>p.tech.includes(filter));
+  return (
+    <div className="wrap">
+      <h1>Portfolio Gallery</h1>
+      <p style={{textAlign:'center'}}>App - FilterBar - ProjectList - ProjectCard</p>
+      <FilterBar filters={filters} active={filter} onChange={setFilter} />
+      <p>Showing {shown.length} projects - filter: {filter}</p>
+      <ProjectList projects={shown} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>
