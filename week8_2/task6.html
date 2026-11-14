@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aria-describedby &amp; aria-invalid</title><style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1e293b;line-height:1.5}
+  h1{font-size:32px;margin-bottom:8px} p{color:#475569}
+  label{font-weight:700;display:block;margin:22px 0 6px}
+  input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+  input:focus{outline:2px solid #2563eb;border-color:#2563eb}
+  input:invalid{border-color:#fca5a5} button{background:#2563eb;color:#fff;border:0;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;margin-top:16px;font-size:16px}
+  button:disabled{background:#94a3b8;cursor:not-allowed}
+  .card{background:#f8fafc;padding:14px 16px;border-radius:8px;margin-top:16px}
+  .error{color:#dc2626;font-weight:600} .ok{color:#16a34a;font-weight:600}
+  .hint{color:#64748b;font-size:14px} a{color:#2563eb}
+</style></head>
+<body>
+<h1>aria-describedby &amp; aria-invalid</h1>
+<p>Submit with a short code, then focus the field with a screen reader on.</p>
+<form id="f" novalidate>
+<label for="code">Course code</label>
+<input id="code" type="text" placeholder="K0126002" aria-describedby="code-hint code-error" aria-invalid="false" minlength="8" required>
+<p id="code-hint" class="hint">Must be 8 characters, e.g. K0126002</p>
+<p id="code-error" class="error" role="alert"></p>
+<button type="submit">Submit</button>
+<p id="ok" class="ok"></p>
+</form>
+<script>
+const code=document.getElementById('code'), err=document.getElementById('code-error'), ok=document.getElementById('ok');
+document.getElementById('f').addEventListener('submit', e=>{
+  e.preventDefault(); ok.textContent='';
+  if(code.value.trim().length < 8){
+    code.setAttribute('aria-invalid','true');
+    err.textContent='Course code must be at least 8 characters.';
+    code.focus();
+  } else {
+    code.setAttribute('aria-invalid','false'); err.textContent='';
+    ok.textContent='✅ Valid course code: '+code.value;
+  }
+});
+code.addEventListener('input', ()=>{ if(code.value.length>=8){ code.setAttribute('aria-invalid','false'); err.textContent=''; } });
+</script>
+</body></html>

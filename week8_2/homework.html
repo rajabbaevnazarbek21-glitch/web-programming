@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upgraded Registration Form</title><style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f1f5f9;margin:0;padding:40px 16px;color:#1e293b}
+.card{max-width:440px;margin:0 auto;background:#fff;padding:32px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+h1{text-align:center;font-size:26px} label{font-weight:700;display:block;margin:20px 0 6px}
+input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+input:focus{outline:2px solid #2563eb} input[aria-invalid="true"]{border-color:#dc2626}
+button{width:100%;background:#2563eb;color:#fff;border:0;padding:14px;border-radius:8px;font-weight:700;font-size:16px;cursor:pointer;margin-top:24px}
+button:disabled{background:#94a3b8;cursor:not-allowed} .error{color:#dc2626;font-size:14px;margin:6px 0 0} .ok{color:#16a34a;text-align:center;font-weight:700}
+</style></head>
+<body>
+<div class="card">
+<h1>Register</h1>
+<form id="f" novalidate>
+<label for="user">Username</label>
+<input id="user" type="text" required minlength="3" maxlength="12" aria-describedby="e-user" aria-invalid="false">
+<p id="e-user" class="error" role="alert"></p>
+
+<label for="email">Email</label>
+<input id="email" type="email" required aria-describedby="e-email" aria-invalid="false">
+<p id="e-email" class="error" role="alert"></p>
+
+<label for="pw">Password</label>
+<input id="pw" type="password" required minlength="8" aria-describedby="e-pw" aria-invalid="false">
+<p id="e-pw" class="error" role="alert"></p>
+
+<label for="pw2">Confirm Password</label>
+<input id="pw2" type="password" required aria-describedby="e-pw2" aria-invalid="false">
+<p id="e-pw2" class="error" role="alert"></p>
+
+<button id="btn" type="submit" disabled>Register</button>
+<p id="success" class="ok"></p>
+</form>
+</div>
+<script>
+const f=document.getElementById('f'), btn=document.getElementById('btn');
+const user=document.getElementById('user'), email=document.getElementById('email'), pw=document.getElementById('pw'), pw2=document.getElementById('pw2');
+function show(el, errId, msg){ document.getElementById(errId).textContent=msg; el.setAttribute('aria-invalid', msg?'true':'false'); }
+function validate(){
+  let ok=true;
+  if(user.validity.valueMissing){ show(user,'e-user','Username is required.'); ok=false; } else if(user.validity.tooShort){ show(user,'e-user','At least 3 characters.'); ok=false; } else show(user,'e-user','');
+  if(email.validity.valueMissing){ show(email,'e-email','Email is required.'); ok=false; } else if(email.validity.typeMismatch){ show(email,'e-email','Must be a valid email.'); ok=false; } else show(email,'e-email','');
+  if(pw.validity.valueMissing){ show(pw,'e-pw','Password is required.'); ok=false; } else if(pw.validity.tooShort){ show(pw,'e-pw','At least 8 characters.'); ok=false; } else show(pw,'e-pw','');
+  if(pw2.value && pw.value!==pw2.value){ pw2.setCustomValidity('Passwords do not match.'); show(pw2,'e-pw2','Passwords do not match.'); ok=false; } else if(pw2.validity.valueMissing){ show(pw2,'e-pw2','Confirm your password.'); ok=false; } else { pw2.setCustomValidity(''); show(pw2,'e-pw2',''); }
+  btn.disabled = !(user.value && email.value && pw.value && pw2.value && ok);
+  return ok;
+}
+[user,email,pw,pw2].forEach(el=>el.addEventListener('input', validate));
+f.addEventListener('submit', e=>{ e.preventDefault(); if(validate()) document.getElementById('success').textContent='✅ Registered! Welcome, '+user.value; });
+validate();
+</script>
+</body></html>

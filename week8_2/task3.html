@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Validity API</title><style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1e293b;line-height:1.5}
+  h1{font-size:32px;margin-bottom:8px} p{color:#475569}
+  label{font-weight:700;display:block;margin:22px 0 6px}
+  input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+  input:focus{outline:2px solid #2563eb;border-color:#2563eb}
+  input:invalid{border-color:#fca5a5} button{background:#2563eb;color:#fff;border:0;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;margin-top:16px;font-size:16px}
+  button:disabled{background:#94a3b8;cursor:not-allowed}
+  .card{background:#f8fafc;padding:14px 16px;border-radius:8px;margin-top:16px}
+  .error{color:#dc2626;font-weight:600} .ok{color:#16a34a;font-weight:600}
+  .hint{color:#64748b;font-size:14px} a{color:#2563eb}
+table{width:100%;border-collapse:collapse;margin-top:16px} td{padding:8px;border-bottom:1px solid #e2e8f0} td:last-child{text-align:right;font-weight:700}
+.true{color:#dc2626} .false{color:#475569}
+</style></head>
+<body>
+<h1>The Validity API</h1>
+<p>This email field has <code>required minlength="6" type="email"</code>. Type and watch the flags.</p>
+<label for="email">Email</label>
+<input id="email" type="email" required minlength="6">
+<table>
+<tr><td>validity.valueMissing</td><td id="vMissing" class="true">true</td></tr>
+<tr><td>validity.typeMismatch</td><td id="vType">false</td></tr>
+<tr><td>validity.tooShort</td><td id="vShort">false</td></tr>
+<tr><td>validity.tooLong</td><td id="vLong">false</td></tr>
+<tr><td>validity.patternMismatch</td><td id="vPattern">false</td></tr>
+<tr><td>validity.rangeUnderflow</td><td id="vUnder">false</td></tr>
+<tr><td>validity.rangeOverflow</td><td id="vOver">false</td></tr>
+<tr><td>validity.customError</td><td id="vCustom">false</td></tr>
+<tr><td style="color:#16a34a">validity.valid</td><td id="vValid" style="color:#16a34a">false</td></tr>
+</table>
+<p id="msg">Email is required.</p>
+<script>
+const e=document.getElementById('email');
+function upd(){
+  const v=e.validity;
+  const set=(id,val)=>{ const el=document.getElementById(id); el.textContent=val; el.className=val?'true':'false'; };
+  set('vMissing',v.valueMissing); set('vType',v.typeMismatch); set('vShort',v.tooShort);
+  set('vLong',v.tooLong); set('vPattern',v.patternMismatch); set('vUnder',v.rangeUnderflow);
+  set('vOver',v.rangeOverflow); set('vCustom',v.customError);
+  const vv=document.getElementById('vValid'); vv.textContent=v.valid; vv.style.color=v.valid?'#16a34a':'#dc2626';
+  const msg=document.getElementById('msg');
+  if(v.valueMissing) msg.textContent='Email is required.';
+  else if(v.typeMismatch) msg.textContent='Must be a valid email address.';
+  else if(v.tooShort) msg.textContent='Too short — need at least 6 characters.';
+  else if(v.valid) { msg.textContent='✅ Valid!'; msg.className='ok'; } else msg.textContent='';
+  if(!v.valid) msg.className='error';
+}
+e.addEventListener('input', upd); upd();
+</script>
+</body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>preventDefault() on Submit</title><style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1e293b;line-height:1.5}
+  h1{font-size:32px;margin-bottom:8px} p{color:#475569}
+  label{font-weight:700;display:block;margin:22px 0 6px}
+  input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+  input:focus{outline:2px solid #2563eb;border-color:#2563eb}
+  input:invalid{border-color:#fca5a5} button{background:#2563eb;color:#fff;border:0;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;margin-top:16px;font-size:16px}
+  button:disabled{background:#94a3b8;cursor:not-allowed}
+  .card{background:#f8fafc;padding:14px 16px;border-radius:8px;margin-top:16px}
+  .error{color:#dc2626;font-weight:600} .ok{color:#16a34a;font-weight:600}
+  .hint{color:#64748b;font-size:14px} a{color:#2563eb}
+</style></head>
+<body>
+<h1>preventDefault()</h1>
+<p>Submit the form — the page does not reload, and the log keeps every attempt.</p>
+<form id="f">
+<label for="user">Username</label>
+<input id="user" type="text" required>
+<button type="submit">Submit</button>
+</form>
+<div class="card" id="log">Waiting for submit...</div>
+<script>
+let n=0; const log=document.getElementById('log');
+document.getElementById('f').addEventListener('submit', e=>{
+  e.preventDefault();
+  n++;
+  const v=document.getElementById('user').value.trim() || '(empty)';
+  if(n===1) log.innerHTML='';
+  log.innerHTML += `<div>Attempt ${n}: username = <b>${v}</b> — page did NOT reload (preventDefault)</div>`;
+});
+</script>
+</body></html>
