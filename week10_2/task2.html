@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 | Page Not Found</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;display:flex;flex-direction:column}
+header{padding:20px 28px;display:flex;justify-content:space-between;align-items:center}
+header a{color:#fff;text-decoration:none;font-weight:700}
+nav a{color:#a1a1aa;text-decoration:none;margin-left:20px}
+nav a:hover{color:#fff}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:radial-gradient(600px 300px at 50% 0%,rgba(190,255,80,.12),transparent),radial-gradient(500px 400px at 90% 100%,rgba(190,255,80,.08),transparent)}
+.badge{border:1px solid #333;padding:8px 16px;border-radius:999px;font-size:12px;letter-spacing:2px;color:#bef264}
+.badge i{font-style:normal;color:#a3e635}
+h1{font-size:clamp(100px,22vw,200px);line-height:1;color:#c8f65d;letter-spacing:-4px;margin:24px 0 8px}
+h2{font-size:clamp(32px,6vw,56px);letter-spacing:-1px}
+p.desc{color:#a1a1aa;max-width:520px;margin:18px auto 28px;line-height:1.6}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 22px;border-radius:10px;font-weight:700;text-decoration:none;font-size:16px;cursor:pointer;border:0}
+.btn-green{background:#c8f65d;color:#111}
+.btn-dark{background:#1a1a1a;color:#fff;border:1px solid #333}
+footer{padding:20px;text-align:center;color:#71717a;font-size:14px}
+@media(max-width:480px){.btns{flex-direction:column;width:100%}.btn{width:100%}}
+</style></head>
+<body>
+<header><a href="../../index.html">Nazarbek — Web Programming</a><nav><a href="../../index.html">Home</a><a href="../../index.html">Projects</a></nav></header>
+<main>
+<span class="badge"><i>●</i> ERROR 404 — NOT FOUND</span>
+<h1>404</h1>
+<h2>Page not found.</h2>
+<p class="desc">Looks like you've taken a wrong turn. The page you're looking for doesn't exist, has been moved, or is temporarily unavailable.</p>
+<div class="btns">
+<a class="btn btn-green" href="../../index.html">← Back to Homepage</a>
+<button class="btn btn-dark" onclick="history.back()">Go Back ↗</button>
+</div>
+<p style="color:#71717a;margin-top:28px">Don't worry. Every great developer gets lost sometimes.</p>
+</main>
+<footer><p>© 2026 Nazarbek Rajabbaev • Web Programming • Gachon University</p></footer>
+<script>
+console.log("404 - page not found");
+document.querySelector('.btn-dark').addEventListener('click', ()=>{ if(history.length<=1) location.href='../../index.html'; });
+</script>
+</body></html>
