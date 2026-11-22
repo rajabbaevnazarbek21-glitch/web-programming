@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Week 11-01 React Components & Props by Rajabbaev Nazarbek, Gachon University.">
+<title>Week 11-01 | React Components & Props — Rajabbaev Nazarbek</title>
+<style>
+:root{--bg:#ffffff;--soft:#ecebe6;--ink:#1f1f1d;--muted:#5f5f5a;--line:#e3e2dc;--green:#3f5e47;--card:#f7f7f4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 "Inter",Helvetica,Arial,sans-serif}
+a{color:var(--green)}button{font:inherit}
+.nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px max(22px,calc((100% - 1120px)/2));background:#fff;border-bottom:1px solid var(--line)}
+.brand{font-weight:800;letter-spacing:-.04em;text-decoration:none;color:var(--ink);font-size:18px}.brand span{color:var(--green)}
+.back{color:var(--muted);text-decoration:none;font-size:13px}
+.wrap{width:min(1120px,calc(100% - 38px));margin:auto}
+.hero{padding:72px 0 42px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(44px,7vw,84px);line-height:.98;letter-spacing:-.06em;margin:14px 0 18px}h1 em{font-style:normal;color:var(--green)}
+.lead{max-width:720px;color:var(--muted);font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.chip{border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:var(--muted);font-size:12px}
+.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;margin-top:28px}
+.hero-card,.project,.student,.exercise,.reflection{background:var(--card);border:1px solid var(--line);border-radius:16px}
+.hero-card{padding:22px}.hero-card strong{font-size:20px}.hero-card p{color:var(--muted);margin:6px 0 0}
+.hero-stat{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}.hero-stat:last-child{border:0}.hero-stat span{color:var(--muted);font-size:13px}.hero-stat b{color:var(--green)}
+section.block{padding:50px 0 8px}.section-head h2{font-size:clamp(27px,4vw,38px);letter-spacing:-.04em;margin:6px 0 0}
+.section-intro{color:var(--muted);max-width:760px;margin:0 0 18px}
+.filter{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:99px;cursor:pointer;font-size:12px}.filter[aria-pressed=true]{background:var(--ink);color:#fff;font-weight:700}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.project{padding:20px;min-height:215px;display:flex;flex-direction:column}
+.project-top{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:.12em;font-weight:700}
+.project h3{margin:16px 0 6px;font-size:18px}.project p{margin:0;color:var(--muted);font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}.tag{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--green);background:#fff}
+.project-links{display:flex;gap:14px;margin-top:auto}.project-links a{font-size:12px;font-weight:600}
+.directory{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.student{padding:20px}.avatar{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:var(--green);color:#fff;font-weight:800;font-size:18px}
+.student h3{margin:12px 0 0}.student p{margin:3px 0;color:var(--muted);font-size:13px}.student dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin:14px 0 0}.student dt{color:var(--muted)}.student dd{margin:0;text-align:right}
+.exercise{padding:22px;margin:16px 0}.exercise-head{display:flex;gap:12px;align-items:center}.exercise-no{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#3f5e471a;color:var(--green);font-weight:800;font-size:13px}
+.exercise h3{margin:0;font-size:20px}.exercise-desc{color:var(--muted);margin:0 0 16px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.demo,.implementation{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}.demo h4{margin:0 0 8px}
+.code{margin:0;white-space:pre-wrap;color:#333;font:11px/1.65 monospace;max-height:420px;overflow:auto}
+.profile-demo{display:flex;align-items:center;gap:14px}.profile-pic{width:65px;height:65px;border-radius:50%;object-fit:cover;background:#ecebe6}
+.notification{list-style:none;padding:11px 12px;border-radius:9px;background:#fff;margin:8px 0;border:1px solid var(--line);font-size:13px}
+.inner-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:8px 0}.inner-card h4{font-size:14px}
+.product-row{display:flex;justify-content:space-between;gap:12px;padding:10px;background:#fff;border-radius:9px;margin:8px 0}
+.student-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+.demo button{border:0;border-radius:8px;background:var(--ink);color:#fff;padding:8px 12px;cursor:pointer;margin-top:9px}
+.status{font-size:12px;padding:8px 10px;border-radius:8px;margin:7px 0}.status.bad{background:#fee8e6;color:#922e29}.status.good{background:#dff5e9;color:#176744}
+.reflection{padding:24px;margin:48px 0}.reflection ul{color:var(--muted);padding-left:20px}.footer{border-top:1px solid var(--line);text-align:center;color:var(--muted);padding:25px 10px;font-size:13px;margin-top:55px}
+.hidden{display:none!important}
+@media(max-width:850px){.hero-grid{grid-template-columns:1fr}.projects,.directory{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.projects,.directory,.split{grid-template-columns:1fr}}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<nav class="nav"><a class="brand" href="../index.html">RN<span>.</span> / RAJABBAEV NAZARBEK</a><a class="back" href="../index.html">← Main page</a></nav>
+<main class="wrap">
+<header class="hero">
+<div class="eyebrow">WEB PROGRAMMING · WEEK 11 · HOMEWORK 01</div>
+<h1>React Components<br><em>&amp; Props.</em></h1>
+<p class="lead">Reusable React components, props, and data-driven lists. Each exercise shows a live demo + the code.</p>
+<div class="chips"><span class="chip">Gachon University</span><span class="chip">Student ID 202637334</span><span class="chip">React 18 + JSX</span><span class="chip">Course K0126002</span></div>
+<div class="hero-grid">
+<div class="hero-card"><div class="eyebrow">STUDENT PROFILE</div><strong>Rajabbaev Nazarbek</strong><p>Student at Gachon University. Contact: <a href="mailto:rajabbaevnazarbek21@gmail.com">rajabbaevnazarbek21@gmail.com</a>. This page is my own Week 11 homework.</p></div>
+<div class="hero-card"><div class="hero-stat"><span>Student ID</span><b>202637334</b></div><div class="hero-stat"><span>Course</span><b>K0126002</b></div><div class="hero-stat"><span>Exercises</span><b>08</b></div></div>
+</div>
+</header>
+
+<section class="block" id="portfolio">
+<div class="section-head"><div class="eyebrow">01 / PROJECTS</div><h2>Portfolio Gallery</h2></div>
+<p class="section-intro">My own weekly projects. Filter by technology - the filters are built automatically from the data.</p>
+<div id="portfolio-root"></div>
+</section>
+
+<section class="block" id="directory">
+<div class="section-head"><div class="eyebrow">02 / STUDENTS</div><h2>Student Directory</h2></div>
+<p class="section-intro">A reusable <code>StudentProfileCard</code> with my real name, ID and course as props.</p>
+<div id="directory-root"></div>
+</section>
+
+<section class="block" id="practice">
+<div class="section-head"><div class="eyebrow">03 / CLASS PRACTICE</div><h2>Components, Props &amp; Rendering</h2></div>
+<p class="section-intro">Eight exercises from this week's React lessons.</p>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E1</span><h3>Your First Component</h3></div><p class="exercise-desc">A function component returns JSX. Render it 3 times.</p><div class="split"><div class="demo"><div id="greeting-root"></div></div><div class="implementation"><pre class="code">function Greeting() {
+  return &lt;p&gt;Hello, World!&lt;/p&gt;;
+}
+&lt;Greeting /&gt; &lt;Greeting /&gt; &lt;Greeting /&gt;</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E2</span><h3>StudentCard — Props</h3></div><p class="exercise-desc">One card with my real info via props.</p><div class="split"><div class="demo"><div id="studentcard-root"></div></div><div class="implementation"><pre class="code">function StudentCard({ name, id, major }) {
+  return &lt;article&gt;&lt;h4&gt;{name}&lt;/h4&gt;
+  &lt;p&gt;Student ID: {id}&lt;/p&gt;
+  &lt;p&gt;Major: {major}&lt;/p&gt;&lt;/article&gt;;
+}
+&lt;StudentCard name="Rajabbaev Nazarbek"
+  id="202637334" major="Gachon University" /&gt;</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E3</span><h3>ProfileCard with Default Prop</h3></div><p class="exercise-desc"><code>avatarUrl</code> is optional, falls back to a default SVG.</p><div class="split"><div class="demo"><div id="profile-root"></div></div><div class="implementation"><pre class="code">function ProfileCard({ name, role, email,
+  avatarUrl = DEFAULT_AVATAR }) {
+  return &lt;article&gt;&lt;img src={avatarUrl} alt={name} /&gt;
+  &lt;div&gt;&lt;h4&gt;{name}&lt;/h4&gt;&lt;p&gt;{role}&lt;/p&gt;
+  &lt;a href={`mailto:${email}`}&gt;{email}&lt;/a&gt;&lt;/div&gt;&lt;/article&gt;;
+}</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E4</span><h3>List of Notifications</h3></div><p class="exercise-desc">Render with <code>.map()</code> + stable <code>key</code>.</p><div class="split"><div class="demo"><div id="notifications-root"></div></div><div class="implementation"><pre class="code">notifications.map(item =&gt;
+  &lt;NotificationItem key={item.id} {...item} /&gt;
+)</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E5</span><h3>Layout with props.children</h3></div><p class="exercise-desc"><code>Card</code> renders any nested JSX.</p><div class="split"><div class="demo"><div id="children-root"></div></div><div class="implementation"><pre class="code">function Card({ title, children }) {
+  return &lt;section&gt;&lt;h4&gt;{title}&lt;/h4&gt;{children}&lt;/section&gt;;
+}
+&lt;Card title="Lecture Topics"&gt;&lt;ul&gt;&lt;li&gt;Components&lt;/li&gt;
+&lt;li&gt;Props&lt;/li&gt;&lt;/ul&gt;&lt;/Card&gt;</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E6</span><h3>ProductCard Code Challenge</h3></div><p class="exercise-desc">Price, rating, In / Out of Stock.</p><div class="split"><div class="demo"><div id="products-root"></div></div><div class="implementation"><pre class="code">function ProductCard({ name, price, rating, inStock }) {
+  return &lt;article&gt;&lt;h4&gt;{name}&lt;/h4&gt;
+  &lt;p&gt;{price.toLocaleString("ko-KR")}원&lt;/p&gt;
+  &lt;p&gt;{rating} / 5 stars&lt;/p&gt;
+  &lt;strong&gt;{inStock ? "In Stock" : "Out of Stock"}&lt;/strong&gt;
+  &lt;/article&gt;;
+}</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E7</span><h3>Rendering a List with Keys</h3></div><p class="exercise-desc"><code>.map()</code> with <code>key={student.id}</code>.</p><div class="split"><div class="demo"><div id="list-root"></div></div><div class="implementation"><pre class="code">students.map(student =&gt;
+  &lt;li key={student.id}&gt;{student.name} — {student.grade}&lt;/li&gt;
+)</pre></div></div></article>
+
+<article class="exercise"><div class="exercise-head"><span class="exercise-no">E8</span><h3>Conditional Rendering</h3></div><p class="exercise-desc"><code>null</code>, <code>&amp;&amp;</code>, ternary. Click to switch.</p><div class="split"><div class="demo"><div id="conditional-root"></div></div><div class="implementation"><pre class="code">function Alert({ message }) {
+  if (!message) return null;
+  return &lt;p&gt;{message}&lt;/p&gt;;
+}
+{user ? "Log out" : "Log in"}</pre></div></div></article>
+</section>
+
+<section class="reflection"><div class="eyebrow">04 / REFLECTION</div><h2>What I Practiced</h2><ul><li>Functional components return JSX.</li><li>Props pass data parent → child.</li><li>Default props make optional inputs safe.</li><li><code>.map()</code> + stable keys for lists.</li><li>Conditional rendering with <code>null</code>, <code>&amp;&amp;</code>, ternary.</li><li><code>props.children</code> makes wrappers flexible.</li></ul></section>
+</main>
+<footer class="footer">© 2026<br><strong>Rajabbaev Nazarbek | Gachon University · 202637334</strong><br>WEB PROGRAMMING · WEEK 11-01</footer>
+
+<script type="text/babel">
+const {useState} = React;
+const projects = [
+ {id:1,title:"Web Programming Portfolio",description:"My main portfolio: semantic HTML, responsive CSS, JS filter, all weeks 4-11.",tech:["HTML","CSS","JavaScript","React"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/portfolio.html",mark:"WP"},
+ {id:2,title:"Book Search",description:"Search books from Open Library API. Type harry potter and see results.",tech:["JavaScript","HTML"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/week7_2/task4.html",mark:"BS"},
+ {id:3,title:"Student Registration Form",description:"Full Name, Student ID, Email, Course, Password with live validation.",tech:["JavaScript","Forms","HTML"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/week8_2/homework.html",mark:"SR"},
+ {id:4,title:"Custom 404 Page",description:"Friendly error page for GitHub Pages so visitors find home.",tech:["HTML","CSS","Git"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/week10_2/404error.html",mark:"404"},
+ {id:5,title:"Advanced CSS",description:"Responsive grids, fixed nav, hover cards, spinner, CSS variables.",tech:["CSS","HTML"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/",mark:"CSS"},
+ {id:6,title:"Semantic HTML Pages",description:"Blog, news, FAQ and portfolio with correct semantic elements.",tech:["HTML"],github:"https://github.com/rajabbaevnazarbek21-glitch/web-programming",demo:"https://rajabbaevnazarbek21-glitch.github.io/web-programming/",mark:"HTML"}
+];
+function ProjectCard({project}) { return <article className="project"><div className="project-top"><span>{project.mark}</span><span>PROJECT / 0{project.id}</span></div><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tech.map(t=><span className="tag" key={t}>{t}</span>)}</div><div className="project-links"><a href={project.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>{project.demo&&<a href={project.demo} target="_blank" rel="noopener noreferrer">Live demo ↗</a>}</div></article>; }
+function FilterBar({items,active,onChange}) { return <div style={{display:"flex",flexWrap:"wrap",gap:8,margin:"18px 0"}}>{items.map(item=><button className="filter" key={item} aria-pressed={active===item} onClick={()=>onChange(item)}>{item}</button>)}</div>; }
+function ProjectList({projects}) { return <div className="projects">{projects.map(p=><ProjectCard key={p.id} project={p}/>)}</div>; }
+function PortfolioGallery() { const [filter,setFilter]=useState("All"); const filters=["All",...new Set(projects.flatMap(p=>p.tech))]; const visible=filter==="All"?projects:projects.filter(p=>p.tech.includes(filter)); return <><FilterBar items={filters} active={filter} onChange={setFilter}/><ProjectList projects={visible}/></>; }
+function StudentProfileCard({name,studentId,major,year}) { return <article className="student"><div className="avatar">RN</div><h3>{name}</h3><p>{major}</p><dl><dt>Student ID</dt><dd>{studentId}</dd><dt>Year</dt><dd>{year}</dd><dt>Course</dt><dd>K0126002</dd></dl></article>; }
+function StudentDirectory() { const students=[{name:"Rajabbaev Nazarbek",studentId:"202637334",major:"Gachon University",year:"2026 — Present"}]; return <div className="directory">{students.map(s=><StudentProfileCard key={s.studentId} {...s}/>)}</div>; }
+function Greeting(){return <p>Hello, World!</p>;}
+function StudentCard({name,id,major}){return <div className="inner-card"><h4>{name}</h4><p>Student ID: {id}</p><p>Major: {major}</p></div>;}
+const DEFAULT_AVATAR="data:image/svg+xml,[STRIPPED]<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" rx="40" fill="#ecebe6"/><circle cx="40" cy="29" r="14" fill="#3f5e47"/><path d="M12 78c2-18 13-28 28-28s26 10 28 28" fill="#3f5e47"/></svg>');
+function ProfileCard({name,role,email,avatarUrl=DEFAULT_AVATAR}){return <div className="profile-demo"><img className="profile-pic" src={avatarUrl} alt={name}/><div><h4>{name}</h4><p>{role}</p><a href={`mailto:${email}`}>{email}</a></div></div>;}
+const notifications=[{id:1,type:"success",message:"Profile updated successfully"},{id:2,type:"warning",message:"Password expires in 3 days"},{id:3,type:"info",message:"New lecture materials available"}];
+function NotificationList(){return <ul style={{padding:0,margin:0}}>{notifications.map(n=><li className="notification" key={n.id}><b>{n.type==="success"?"✓":n.type==="warning"?"!":"i"}</b> {n.message}</li>)}</ul>;}
+function Card({title,children}){return <section className="inner-card"><h4>{title}</h4>{children}</section>;}
+function ProductCard({name,price,rating,inStock}){return <div className="product-row"><div><strong>{name}</strong><div style={{fontSize:12,color:"#5f5f5a"}}>{rating} / 5 stars</div></div><div style={{textAlign:"right"}}><strong>{price.toLocaleString("ko-KR")}원</strong><div style={{fontSize:11,fontWeight:800,color:inStock?"#16764d":"#ad423a"}}>{inStock?"In Stock":"Out of Stock"}</div></div></div>;}
+const roster=[{id:1,name:"Kim Jiwon",grade:"A"},{id:2,name:"Choi Minjun",grade:"B+"},{id:3,name:"Han Seoyeon",grade:"A-"}];
+function StudentList(){return roster.map(s=><div className="student-row" key={s.id}><span>{s.name}</span><strong>{s.grade}</strong></div>);}
+function ConditionalDemo(){const [user,setUser]=useState(null);return <div>{!user&&<div className="status bad">Please log in to view your dashboard.</div>}{user&&<div className="status good">Welcome, {user.name}! You are logged in.</div>}<button onClick={()=>setUser(user?null:{name:"Nazarbek"})}>{user?"Log out":"Log in"}</button></div>;}
+function mount(id,component){ReactDOM.createRoot(document.getElementById(id)).render(component);}
+mount("portfolio-root",<PortfolioGallery/>);
+mount("directory-root",<StudentDirectory/>);
+mount("greeting-root",<><Greeting/><Greeting/><Greeting/></>);
+mount("studentcard-root",<StudentCard name="Rajabbaev Nazarbek" id="202637334" major="Gachon University"/>);
+mount("profile-root",<ProfileCard name="Prof. Muxiddin Toshpulatov" role="Professor · Gachon University" email="muhiddin@gachon.ac.kr"/>);
+mount("notifications-root",<NotificationList/>);
+mount("children-root",<><Card title="Lecture Topics"><ul><li>Components</li><li>Props</li></ul></Card><Card title="Homework"><p>Build a student portfolio component.</p></Card></>);
+mount("products-root",<><ProductCard name="Wireless Earbuds" price={89000} rating={4.5} inStock={true}/><ProductCard name="Mechanical Keyboard" price={129000} rating={4} inStock={true}/><ProductCard name="USB-C Hub" price={45000} rating={3.5} inStock={false}/></>);
+mount("list-root",<StudentList/>);
+mount("conditional-root",<ConditionalDemo/>);
+</script>
+</body>
+</html>
