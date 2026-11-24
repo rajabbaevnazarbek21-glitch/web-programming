@@ -176,7 +176,7 @@ function render(){
  if(!w){
   app.innerHTML='<h2 style="color:var(--p);margin-bottom:6px">Homework</h2><p style="margin-bottom:16px">Hi, I am Nazarbek. Choose a week:</p><div class="grid">'+Object.keys(weeks).map(x=>'<a class="tile" href="#'+x+'"><b>'+x+'</b>'+weeks[x].t+'<br><small>'+weeks[x].d+'</small></a>').join('')+'</div>';
  }else{
-  app.innerHTML='<a class="back" href="#">← Home</a><h2 style="color:var(--p);margin-bottom:14px">'+w.t+'</h2>'+w.ex.map((e,i)=>'<div class="ex"><h3>'+e[0]+'</h3><iframe sandbox="allow-scripts" title="'+e[0]+'"></iframe><details><summary>Show code</summary><pre>'+esc(W(e[1]))+'</pre></details></div>').join('');
+  app.innerHTML='<a class="back" href="#">← Home</a><h2 style="color:var(--p);margin-bottom:14px">'+w.t+'</h2>'+w.ex.map((e,i)=>'<div class="ex"><h3>'+e[0]+'</h3><iframe sandbox="allow-scripts allow-forms" title="'+e[0]+'"></iframe><details><summary>Show code</summary><pre>'+esc(W(e[1]))+'</pre></details></div>').join('');
   app.querySelectorAll('iframe').forEach((f,i)=>f.srcdoc=W(w.ex[i][1]));
  }
  scrollTo(0,0);
